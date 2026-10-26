@@ -36,10 +36,8 @@ namespace ScpFreezer
 
         private void KillAllRoutines()
         {
-            foreach (CoroutineHandle handle in _routines.Values)
-                Timing.KillCoroutines(handle);
-
-            _routines.Clear();
+            // Czyścimy pamięć co rundę, żeby czasy się nie nałożyły
+            _freezeEnds.Clear();
         }
 
         // Ile sekund freeza zostało, licząc od startu rundy.
@@ -49,10 +47,10 @@ namespace ScpFreezer
             return (float)(Config.FreezeDuration - elapsed);
         }
 
-        private void OnSpawned(SpawnedEventArgs ev)
-        {
-            Player player = ev.Player;
-            if (player == null || player.Role == null) return;
+            // Sprawdzamy w słowniku z configu, czy ta rola ma dostać freeza
+            if (Config.ScpFreezeSettings.TryGetValue(ev.Player.Role.Type, out bool shouldFreeze) && shouldFreeze)
+            {
+                float timeToFreeze = Config.FreezeDuration;
 
             // Każdy nowy spawn zastępuje poprzednią pętlę tego gracza.
             if (_routines.TryGetValue(player, out CoroutineHandle old))
