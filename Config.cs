@@ -1,4 +1,4 @@
-﻿using Exiled.API.Interfaces;
+using Exiled.API.Interfaces;
 using PlayerRoles;
 using System.Collections.Generic;
 
@@ -6,6 +6,7 @@ namespace ScpFreezer
 {
     public class Config : IConfig
     {
+        public const float MaximumFreezeDuration = 3600f;
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; } = false;
 

@@ -1,26 +1,34 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<!-- TO JEST JEDYNA SŁUSZNA WERSJA DLA SERWERA SCP -->
 		<TargetFramework>net48</TargetFramework>
+		<Version>2.1.1</Version>
+		<LangVersion>7.3</LangVersion>
+		<ReferencesPath Condition="'$(ReferencesPath)' == ''">..\REFERENCES</ReferencesPath>
 		<Platforms>x64</Platforms>
 		<PlatformTarget>x64</PlatformTarget>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Compile Remove="tests\**\*.cs" />
 	  <Reference Include="Assembly-CSharp">
-	    <HintPath>..\REFERENCES\Assembly-CSharp.dll</HintPath>
+	    <HintPath>$(ReferencesPath)\Assembly-CSharp.dll</HintPath>
+	    <Private>false</Private>
 	  </Reference>
 	  <Reference Include="Assembly-CSharp-firstpass">
-	    <HintPath>..\REFERENCES\Assembly-CSharp-firstpass.dll</HintPath>
+	    <HintPath>$(ReferencesPath)\Assembly-CSharp-firstpass.dll</HintPath>
+	    <Private>false</Private>
 	  </Reference>
 	  <Reference Include="Exiled.API">
-	    <HintPath>..\REFERENCES\Exiled.API.dll</HintPath>
+	    <HintPath>$(ReferencesPath)\Exiled.API.dll</HintPath>
+	    <Private>false</Private>
 	  </Reference>
 	  <Reference Include="Exiled.Events">
-	    <HintPath>..\REFERENCES\Exiled.Events.dll</HintPath>
+	    <HintPath>$(ReferencesPath)\Exiled.Events.dll</HintPath>
+	    <Private>false</Private>
 	  </Reference>
 	  <Reference Include="UnityEngine.CoreModule">
-	    <HintPath>..\REFERENCES\UnityEngine.CoreModule.dll</HintPath>
+	    <HintPath>$(ReferencesPath)\UnityEngine.CoreModule.dll</HintPath>
+	    <Private>false</Private>
 	  </Reference>
 	</ItemGroup>
 </Project>
