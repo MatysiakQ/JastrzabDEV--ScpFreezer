@@ -1,0 +1,46 @@
+name: Publish v2.1.1
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/releases/v2.1.1.md'
+      - '.github/workflows/release-v2.1.1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-v2.1.1
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.repository == 'MatysiakQ/JastrzabDEV--ScpFreezer' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '8.0.x'
+      - name: Run regression tests
+        run: dotnet run --project tests/Regression/Regression.csproj --configuration Release
+      - name: Verify DLL checksum
+        working-directory: dist
+        run: sha256sum --check SHA256SUMS
+      - name: Create draft with assets and publish tagged release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release create v2.1.1 dist/ScpFreezer.dll dist/SHA256SUMS \
+            --draft \
+            --target "$GITHUB_SHA" \
+            --title "SCPFreezer v2.1.1" \
+            --notes-file .github/releases/v2.1.1.md
+          gh release edit v2.1.1 --draft=false --latest
