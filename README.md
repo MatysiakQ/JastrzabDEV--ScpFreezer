@@ -38,8 +38,8 @@ scp_freezer:
   freeze_message: '<i>Systemy startowe... Pozostaniesz w przechowalni jeszcze przez <color=red>%time%</color> sekund.</i>'
 
   scp_freeze_settings:
-    Scp051: true
-    Scp0512: false
+    Scp049: true
+    Scp0492: false
     Scp079: false
     Scp096: true
     Scp106: true
@@ -57,7 +57,7 @@ scp_freezer:
 
 ## Integracje i ograniczenia
 
-Plugin rozpoznaje customowe SCP po bazowym `RoleTypeId`. Domyślnie nie zamraża SCP-051-2, SCP-079 i SCP-3114. Sam Ensnared nie blokuje wszystkich ataków, umiejętności i teleportów wykonywanych przez inne pluginy.
+Plugin rozpoznaje customowe SCP po bazowym `RoleTypeId`. Domyślnie nie zamraża SCP-049-2, SCP-079 i SCP-3114. Sam Ensnared nie blokuje wszystkich ataków, umiejętności i teleportów wykonywanych przez inne pluginy.
 
 Jeżeli inny system usunie efekt podczas okna, ponowne nałożenie nastąpi przy kolejnym sprawdzeniu, nominalnie do około 0,1 sekundy plus czas klatki. Ochrona spawnu lub handler efektów może odrzucić Ensnared; plugin ponawia próbę i nie pokazuje wtedy fałszywego komunikatu o blokadzie.
 
