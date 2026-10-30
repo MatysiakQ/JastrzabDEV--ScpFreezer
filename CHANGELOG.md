@@ -11,5 +11,5 @@
 - SF-07: release identifiable owned effects and hints on disable, role changes, round end, restart and lobby transition; preserve unrelated HUD messages.
 - SF-08: implement opt-in spawn/window/effect diagnostics.
 - Add one worker with generation guards, per-player failure isolation and recovery for role assignments without Spawned.
-- Add 49 source-based regression scenarios and a GitHub Actions workflow. These do not replace Unity/server/client tests.
+- Add 51 source-based regression scenarios and a GitHub Actions workflow. These do not replace Unity/server/client tests.
 - Include the net48 x64 DLL compiled against EXILED 9.12.6 and a SHA-256 checksum. Document reference DLL setup and integration limits.

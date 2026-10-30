@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+namespace UnityEngine { public static class Time { public static double timeAsDouble => MEC.Timing.EffectNow; } }
+
 namespace PlayerRoles
 {
     public enum RoleTypeId { ClassD, Scp049, Scp0492, Scp079, Scp096, Scp106, Scp173, Scp939, Scp3114 }
@@ -16,7 +18,7 @@ namespace CustomPlayerEffects
         private byte intensity;
         private double expires;
         public float Duration { get; private set; }
-        public float TimeLeft => Duration == 0 ? 0 : (float)Math.Max(0, expires - MEC.Timing.Now);
+        public float TimeLeft => Duration == 0 ? 0 : (float)Math.Max(0, expires - MEC.Timing.EffectNow);
         public byte Intensity
         {
             get
@@ -35,7 +37,7 @@ namespace CustomPlayerEffects
             if (value == 0 || !Reject) SetIntensity(value);
             // Like the game, same-intensity duration changes do not emit the intensity event.
             Duration = duration;
-            expires = MEC.Timing.Now + duration;
+            expires = MEC.Timing.EffectNow + duration;
         }
         public void DisableEffect() => SetIntensity(0);
         private void SetIntensity(byte value)
@@ -154,6 +156,8 @@ namespace MEC
         static readonly Dictionary<int, Item> Items = new();
         static int nextId;
         public static double Now;
+        private static double effectClockOffset;
+        public static double EffectNow => Now - effectClockOffset;
         public static int Active => Items.Count;
         public static float WaitForSeconds(float seconds) => seconds;
         public static CoroutineHandle RunCoroutine(IEnumerator<float> iterator)
@@ -180,6 +184,14 @@ namespace MEC
             }
             Now = target;
         }
-        public static void Reset() { Items.Clear(); nextId = 0; Now = 0; }
+        public static void StallTo(double target, double effectTimeAdvanced)
+        {
+            double oldEffectTime = EffectNow;
+            Now = target;
+            effectClockOffset = target - oldEffectTime - effectTimeAdvanced;
+            foreach (Item item in Items.Values)
+                if (item.Due < target) item.Due = target;
+        }
+        public static void Reset() { Items.Clear(); nextId = 0; Now = 0; effectClockOffset = 0; }
     }
 }

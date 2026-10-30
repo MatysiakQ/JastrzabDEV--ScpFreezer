@@ -38,8 +38,8 @@ scp_freezer:
   freeze_message: '<i>Systemy startowe... Pozostaniesz w przechowalni jeszcze przez <color=red>%time%</color> sekund.</i>'
 
   scp_freeze_settings:
-    Scp049: true
-    Scp0492: false
+    Scp051: true
+    Scp0512: false
     Scp079: false
     Scp096: true
     Scp106: true
@@ -57,7 +57,7 @@ scp_freezer:
 
 ## Integracje i ograniczenia
 
-Plugin rozpoznaje customowe SCP po bazowym `RoleTypeId`. Domyślnie nie zamraża SCP-049-2, SCP-079 i SCP-3114. Sam Ensnared nie blokuje wszystkich ataków, umiejętności i teleportów wykonywanych przez inne pluginy.
+Plugin rozpoznaje customowe SCP po bazowym `RoleTypeId`. Domyślnie nie zamraża SCP-051-2, SCP-079 i SCP-3114. Sam Ensnared nie blokuje wszystkich ataków, umiejętności i teleportów wykonywanych przez inne pluginy.
 
 Jeżeli inny system usunie efekt podczas okna, ponowne nałożenie nastąpi przy kolejnym sprawdzeniu, nominalnie do około 0,1 sekundy plus czas klatki. Ochrona spawnu lub handler efektów może odrzucić Ensnared; plugin ponawia próbę i nie pokazuje wtedy fałszywego komunikatu o blokadzie.
 
@@ -89,7 +89,7 @@ Testy regresji wymagają SDK .NET 8 i nie pobierają pakietów NuGet:
 dotnet run --project tests/Regression/Regression.csproj --configuration Release
 ```
 
-**49 scenariuszy** obejmuje SF-01–SF-08 z audytu: lobby, wspólny termin końca, opóźnione spawny, reload, zmianę roli, rozłączenie, zewnętrzne efekty i hinty, walidację konfiguracji oraz zakończenie rundy wewnątrz callbacka efektu.
+**51 scenariuszy** obejmuje SF-01–SF-08 z audytu: lobby, wspólny termin końca, opóźnione spawny, reload, zmianę roli, rozłączenie, zewnętrzne efekty i hinty, walidację konfiguracji oraz zakończenie rundy wewnątrz callbacka efektu.
 
 Testy kompilują rzeczywisty kod pluginu z atrapami API i zegara. Nie uruchamiają Unity ani klienta. CI wykonuje ten zestaw; sprawdzenie docelowych bibliotek i test na serwerze są osobnymi etapami.
 
@@ -103,7 +103,7 @@ Existing config keys and default role settings are retained. Zero disables freez
 
 The included [DLL](dist/ScpFreezer.dll) targets .NET Framework 4.8 x64 and was compiled against EXILED 9.12.6. Other versions require their own integration check. Build with `dotnet build ScpFreezer.csproj -c Release -p:Platform=x64` after supplying the five server reference DLLs listed above; use `ReferencesPath` to override their directory.
 
-Run the 49 regression scenarios with `dotnet run --project tests/Regression/Regression.csproj --configuration Release` using .NET 8. These use the actual plugin source with API/timing doubles, not a Unity server.
+Run the 51 regression scenarios with `dotnet run --project tests/Regression/Regression.csproj --configuration Release` using .NET 8. These use the actual plugin source with API/timing doubles, not a Unity server.
 
 Ensnared does not prevent every ability or scripted teleport. Effect removal can leave a gap until the next 0.1-second polling iteration. The effect API has no ownership token: indistinguishable direct writes with the same intensity, duration and timer cannot be attributed reliably. Freezer uses intensity 255 as a marker; Ensnared's movement block is identical at any positive intensity.
 

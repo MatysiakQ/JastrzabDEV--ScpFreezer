@@ -24,7 +24,7 @@ public static class Program
         Timing.Reset(); Events.Player.Reset(); Events.Server.Reset(); CustomPlayerEffects.StatusEffectBase.Reset();
         Player.List.Clear(); Log.Messages.Clear();
         Round.IsStarted = started; Round.IsEnded = false; Round.StartedAt = 0;
-        player = new Player(); plugin = new ScpFreezerPlugin { Clock = () => Timing.Now };
+        player = new Player(); plugin = new ScpFreezerPlugin();
         configure?.Invoke(plugin.Config);
         try { plugin.OnEnabled(); check(); Console.WriteLine("PASS " + name); passed++; }
         catch (Exception e) { Console.WriteLine("FAIL " + name + ": " + e); failed++; }
@@ -81,6 +81,8 @@ public static class Program
         Test("47 fractional duration ends without whole-second overshoot", () => { Spawn(); At(.051); Free(); }, c => c.FreezeDuration = .05f);
         Test("48 empty message suppresses hints", () => { Spawn(); At(1); Frozen(); Require(player.Hints.Count == 0, "Empty message emitted hint"); }, c => c.FreezeMessage = "");
         Test("49 same-duration RA write within one frame takes ownership", () => { Spawn(); At(.01); player.Effect.SetState(1, 20); plugin.OnDisabled(); Frozen(); Require(player.Effect.TimeLeft > 19.99, "Foreign same-duration write removed"); });
+        Test("50 capped Unity deltaTime does not prevent disable cleanup", () => { Spawn(); At(2); Timing.StallTo(5, .2); plugin.OnDisabled(); Free(); });
+        Test("51 stall past the round deadline releases owned effect", () => { Spawn(); At(2); Timing.StallTo(25, .2); At(25.01); Free(); Require(Sessions == 0 && Timing.Active == 0, "Lag left a session"); });
         Console.WriteLine($"RESULT: {passed} passed, {failed} failed. API/timing doubles; Unity and clients are not executed.");
         return failed == 0 ? 0 : 1;
     }

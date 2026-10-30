@@ -7,7 +7,6 @@ using MEC;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 
@@ -37,7 +36,9 @@ namespace ScpFreezer
         private bool _windowOpen;
         private float _duration;
         private int _generation;
-        internal Func<double> Clock = () => Stopwatch.GetTimestamp() / (double)Stopwatch.Frequency;
+        // Effect.TimeLeft advances with Unity deltaTime, which may be capped during a lag spike.
+        // Use the same clock for ownership checks; the round deadline remains Round.ElapsedTime.
+        internal Func<double> Clock = () => UnityEngine.Time.timeAsDouble;
 
         private sealed class FreezeSession
         {
